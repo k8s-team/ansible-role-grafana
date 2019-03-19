@@ -1,0 +1,26 @@
+---
+
+- name: Ensures {{ destFolder }} dir exists
+  file:
+    path: "{{ destFolder }}"
+    state: directory
+
+- include_tasks: install-datasources.yml
+  when: sidecar.datasources.enabled
+
+- name: Generate override file
+  template:
+    src: "override.yml"
+    dest: "{{ destFolder }}/override.yml"
+
+- name: Register deployed count chart
+  shell: helm ls | grep {{ releaseName }} | wc -l
+  register: deployed
+
+- name: Install Grafana
+  shell: |
+    helm install stable/grafana \
+     --name {{ releaseName }} \
+     -f {{ destFolder }}/override.yml \
+     --wait
+  when: deployed.stdout == "0"

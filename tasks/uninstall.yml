@@ -1,0 +1,13 @@
+---
+
+- name: Remove grafana
+  shell: helm delete --purge {{ releaseName }}
+  ignore_errors: yes
+
+- include_tasks: uninstall-datasources.yml
+  when: sidecar.datasources.enabled
+
+- name: Clean {{ destFolder }}
+  file:
+    path: "{{ destFolder }}"
+    state: absent

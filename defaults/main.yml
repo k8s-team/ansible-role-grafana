@@ -1,0 +1,21 @@
+---
+# defaults file for grafana
+
+destFolder: "{{ ansible_env.HOME }}/.k8s-team/grafana"
+state: present
+
+releaseName:  grafana
+
+ingress:
+  enabled: false
+  hosts: [grafana.example.com]
+
+
+sidecar:
+  datasources:
+    enabled: false
+
+    prometheus:
+      enabled: false
+      url: http://prometheus-server
+      namespace: default

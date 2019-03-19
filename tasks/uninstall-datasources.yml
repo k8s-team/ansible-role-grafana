@@ -1,0 +1,12 @@
+---
+
+- block: Uninstall Prometheus datasource
+
+    - name: Uninstall generated datasource
+      k8s:
+        state: absent
+        src: "{{ destFolder }}/{{ item }}"
+      loop:
+        - "sidecar-datasources/prometheus.yaml"
+
+  when: sidecar.sidecar.datasources.prometheus.enabled

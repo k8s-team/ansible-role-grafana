@@ -1,0 +1,10 @@
+ingress:
+  enabled: {{ ingress.enabled }}
+  hosts:
+  {% for host in ingress.hosts %}
+  - {{ host }}
+  {% endfor %}
+
+sidecar:
+  datasources:
+    enabled: {{ sidecar.datasources.enabled }}

@@ -1,0 +1,27 @@
+---
+
+- name: Ensures {{ destFolder }}/sidecar-datasources dir exists
+  file:
+    path: "{{ destFolder }}/sidecar-datasources"
+    state: directory
+
+- name: Install datasources
+
+  block:
+
+    - name: Create prometheus datasource from template
+      template:
+        src: "{{ item }}"
+        dest: "{{ destFolder }}/{{ item }}"
+      loop:
+        - "sidecar-datasources/prometheus.yaml"
+
+    - name: Install generated prometheus datasource
+      k8s:
+        state: present
+        src: "{{ destFolder }}/{{ item }}"
+      loop:
+        - "sidecar-datasources/prometheus.yaml"
+
+  when: sidecar.datasources.prometheus.enabled
+
